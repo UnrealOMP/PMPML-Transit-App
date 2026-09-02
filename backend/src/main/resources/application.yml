@@ -1,0 +1,89 @@
+  server:
+    port: 8080
+    servlet:
+      context-path: /api
+
+  spring:
+    application:
+      name: transit-platform
+    profiles:
+      active: dev
+    datasource:
+      url: jdbc:postgresql://localhost:5432/transit
+      username: transit
+      password: transit123
+      hikari:
+        maximum-pool-size: 20
+        minimum-idle: 5
+    jpa:
+      hibernate:
+        ddl-auto: validate
+      show-sql: false
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.PostgreSQLDialect
+    flyway:
+      enabled: true
+    data:
+      redis:
+        host: localhost
+        port: 6379
+    kafka:
+      bootstrap-servers: localhost:9092
+      producer:
+        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+        value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      consumer:
+        key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+        group-id: transit-platform
+      listener:
+        missing-topics-fatal: false
+        idle-event-interval: 30000
+      admin:
+        fail-fast: false
+    neo4j:
+      uri: bolt://localhost:7687
+      authentication:
+        username: neo4j
+        password: password
+
+  app:
+    jwt:
+      # Development fallback only. Set JWT_SECRET in every deployed environment.
+      secret: ${JWT_SECRET:c3VwZXItc2VjcmV0LWtleS1mb3ItdGVzdGluZy1vbmx5LWNoYW5nZS1pbi1wcm9k}
+      access-token-expiration-ms: 3600000
+      refresh-token-expiration-ms: 604800000
+    cors:
+      allowed-origins: http://localhost:5173
+    location:
+      update-interval-seconds: 10
+      update-distance-meters: 100
+    kafka:
+      topics:
+        user-registered: user.registered
+        booking-created: booking.created
+        payment-initiated: payment.initiated
+        payment-succeeded: payment.succeeded
+        payment-failed: payment.failed
+        ticket-generated: ticket.generated
+        ticket-verified: ticket.verified
+        bus-location-updated: bus.location.updated
+        trip-started: trip.started
+        trip-completed: trip.completed
+        notification-requested: notification.requested
+
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: health,info,metrics,prometheus
+    tracing:
+      sampling:
+        probability: 1.0
+
+  springdoc:
+    api-docs:
+      path: /v3/api-docs
+    swagger-ui:
+      path: /swagger-ui.html

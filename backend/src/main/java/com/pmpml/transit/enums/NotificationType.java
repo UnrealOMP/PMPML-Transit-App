@@ -1,0 +1,6 @@
+package com.pmpml.transit.enums;
+
+public enum NotificationType {
+    BOOKING_CONFIRMED, PAYMENT_SUCCESSFUL, PAYMENT_FAILED,
+    TICKET_GENERATED, BUS_ARRIVAL, SERVICE_DISRUPTION, GENERAL
+}

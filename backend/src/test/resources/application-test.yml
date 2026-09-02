@@ -1,0 +1,38 @@
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:16:///pmpml_test
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  neo4j:
+    uri: bolt://localhost:7687
+    authentication:
+      username: neo4j
+      password: password
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: test-consumer
+      auto-offset-reset: earliest
+
+app:
+  jwt:
+    secret: test-secret-key-that-is-at-least-256-bits-long-for-hs256-algorithm
+    access-token-expiration: 3600000
+    refresh-token-expiration: 86400000
+  cors:
+    allowed-origins: http://localhost:5173
+
+logging:
+  level:
+    com.pmpml.transit: DEBUG
+    org.springframework.security: DEBUG
