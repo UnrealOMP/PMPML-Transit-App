@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -44,6 +45,7 @@ class AuthControllerIntegrationTest {
         request.setPhoneNumber("9000000001");
 
         mockMvc.perform(post("/api/v1/auth/register")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -60,6 +62,7 @@ class AuthControllerIntegrationTest {
         request.setFullName("Test User");
 
         mockMvc.perform(post("/api/v1/auth/register")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isConflict());
@@ -75,6 +78,7 @@ class AuthControllerIntegrationTest {
         request.setFullName("Test User");
 
         mockMvc.perform(post("/api/v1/auth/register")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
@@ -90,6 +94,7 @@ class AuthControllerIntegrationTest {
         request.setFullName("Weak Pass");
 
         mockMvc.perform(post("/api/v1/auth/register")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
@@ -106,6 +111,7 @@ class AuthControllerIntegrationTest {
         regReq.setFullName("Login Tester");
 
         mockMvc.perform(post("/api/v1/auth/register")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(regReq)))
                 .andExpect(status().isCreated());
@@ -116,6 +122,7 @@ class AuthControllerIntegrationTest {
         loginReq.setPassword(testPassword);
 
         mockMvc.perform(post("/api/v1/auth/login")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginReq)))
                 .andExpect(status().isOk())
@@ -132,6 +139,7 @@ class AuthControllerIntegrationTest {
         loginReq.setPassword("WrongPassword123!");
 
         mockMvc.perform(post("/api/v1/auth/login")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginReq)))
                 .andExpect(status().isUnauthorized());
@@ -146,6 +154,7 @@ class AuthControllerIntegrationTest {
         loginReq.setPassword(testPassword);
 
         mockMvc.perform(post("/api/v1/auth/login")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginReq)))
                 .andExpect(status().isUnauthorized());
@@ -161,6 +170,7 @@ class AuthControllerIntegrationTest {
         regReq.setFullName("Refresh Tester");
 
         mockMvc.perform(post("/api/v1/auth/register")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(regReq)))
                 .andExpect(status().isCreated());
@@ -170,6 +180,7 @@ class AuthControllerIntegrationTest {
         loginReq.setPassword(testPassword);
 
         String loginResponse = mockMvc.perform(post("/api/v1/auth/login")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginReq)))
                 .andExpect(status().isOk())
@@ -179,6 +190,7 @@ class AuthControllerIntegrationTest {
 
         // Refresh the token
         mockMvc.perform(post("/api/v1/auth/refresh")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", "Bearer " + refreshToken))
                 .andExpect(status().isOk())
