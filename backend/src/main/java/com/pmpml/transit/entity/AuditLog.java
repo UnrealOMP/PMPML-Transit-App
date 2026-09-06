@@ -10,7 +10,7 @@ import java.util.UUID;
 public class AuditLog extends BaseEntity {
     @Column(nullable = false) private UUID userId;
     @Column(nullable = false, length = 100) private String action;
-    @Column(nullable = false, length = 100) private String entityName;
+    @Column(name = "entity", nullable = false, length = 100) private String entityName;
     @Column(nullable = false) private UUID entityId;
     @Column(length = 2000) private String details;
     @Column(length = 50) private String ipAddress;

@@ -173,7 +173,8 @@ class BookingServiceTest {
         request.setSourceStopId(sourceStop.getId());
         request.setDestinationStopId(destStop.getId());
 
-        when(tripService.findTrip(testTrip.getId())).thenReturn(testTrip);
+        when(tripRepository.findByIdForUpdate(testTrip.getId()))
+        .thenReturn(Optional.of(testTrip));
 
         assertThrows(BusinessException.class,
                 () -> bookingService.createBooking(request, UUID.randomUUID().toString(), testUser));
