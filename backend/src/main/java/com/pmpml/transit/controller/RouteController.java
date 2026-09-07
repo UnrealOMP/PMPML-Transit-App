@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
@@ -22,7 +24,8 @@ public class RouteController {
     @PostMapping("/admin/routes")
     @Operation(summary = "Create a new route (Admin)")
     public ResponseEntity<RouteResponse> createRoute(@Valid @RequestBody CreateRouteRequest request) {
-        return ResponseEntity.ok(routeService.createRoute(request));
+        return ResponseEntity.status(HttpStatus.CREATED)
+        .body(routeService.createRoute(request));
     }
 
     @GetMapping("/routes/{id}")

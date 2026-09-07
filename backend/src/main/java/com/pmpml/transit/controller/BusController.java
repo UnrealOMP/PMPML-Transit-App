@@ -1,5 +1,6 @@
 package com.pmpml.transit.controller;
 
+
 import com.pmpml.transit.dto.request.CreateBusRequest;
 import com.pmpml.transit.dto.response.BusResponse;
 import com.pmpml.transit.dto.response.PageResponse;
@@ -8,6 +9,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
@@ -22,7 +25,8 @@ public class BusController {
     @PostMapping("/admin/buses")
     @Operation(summary = "Create a new bus (Admin)")
     public ResponseEntity<BusResponse> createBus(@Valid @RequestBody CreateBusRequest request) {
-        return ResponseEntity.ok(busService.createBus(request));
+        return ResponseEntity.status(HttpStatus.CREATED)
+        .body(busService.createBus(request));
     }
 
     @GetMapping("/buses/{id}")
