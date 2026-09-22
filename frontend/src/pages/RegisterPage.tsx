@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { authApi } from "../services/api";
+import { useAuth } from "../hooks/useAuth";
+
 
 export default function RegisterPage() {
   const [fullName, setFullName] = useState("");
@@ -11,6 +12,7 @@ export default function RegisterPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const nav = useNavigate();
+  const { register } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,8 +29,8 @@ export default function RegisterPage() {
 
     setLoading(true);
     try {
-      await authApi.register({ fullName, email, phoneNumber: phone, password });
-      nav("/login", { state: { registered: true } });
+      await register({ fullName, email, phoneNumber: phone, password });
+      nav("/dashboard");
     } catch (err: any) {
       setError(
         err.response?.data?.message ||
@@ -68,7 +70,7 @@ export default function RegisterPage() {
               type="text"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              placeholder="John Doe"
+              placeholder="Enter your Name"
               required
             />
           </div>
